@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,15 +28,15 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
 
-    @Cacheable(value = "producsts", key = "#productId", unless = "#result == null", cacheManager = "cacheManager")
-    public Product getProductById(Long productId){
-        return productRepository.findById(productId).orElse(null);
-    }
-
-    @Cacheable(value = "products", cacheManager = "cacheManager")
+    @Cacheable(value = "products", key = "#root.methodName", unless = "#result == null", cacheManager = "cacheManager")
     public List<Product> getAllProducts(){
         logger.info("Return from db");
         return productRepository.findAll();
+    }
+
+    @Cacheable(value = "products", key = "#root.methodName + #productId", unless = "#result == null", cacheManager = "cacheManager")
+    public Product getProductById(Long productId){
+        return productRepository.findById(productId).orElse(null);
     }
 
     @CacheEvict(value = "products", allEntries = true, cacheManager = "cacheManager")
@@ -51,6 +50,7 @@ public class ProductService {
         }
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public String deleteProduct(Long productId){
         productRepository.deleteById(productId);
         return "Product deleted";

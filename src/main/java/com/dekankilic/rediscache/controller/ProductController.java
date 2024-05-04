@@ -4,8 +4,6 @@ import com.dekankilic.rediscache.dto.ProductCreateRequest;
 import com.dekankilic.rediscache.dto.ProductUpdateRequest;
 import com.dekankilic.rediscache.entity.Product;
 import com.dekankilic.rediscache.service.ProductService;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
